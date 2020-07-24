@@ -2,18 +2,20 @@ library(tidyverse)
 library(readxl)
 library(tidyxl)
 
+path <- "master_table_plants_extinct_color.xlsx"
+
 # Read in the sheet, I've opted to not use the first line as headers since I add them back in manually at the end.
-x <- read_excel("master_table_plants_extinct_color.xlsx", col_names = FALSE)
+x <- read_excel(path, col_names = FALSE)
 
 # Pulling the formatting out of the sheet
-formats <- xlsx_formats("master_table_plants_extinct_color.xlsx")
+formats <- xlsx_formats(path)
 
 # Pulling the fill colours specifically out of the path
 fill_colours_path <- formats$local$fill$patternFill$fgColor$rgb
 
 #  Import all the cells (note that it also imports extra whitespace beyond column 24, this is deal with below),
 # Create new columns of 'x_fill' with the fill colours, by looking up the local format id of each cell
-fills <- xlsx_cells("master_table_plants_extinct_color.xlsx",
+fills <- xlsx_cells(path,
                 sheet = "Sheet1") %>% 
   mutate(fill_colour = fill_colours_path[local_format_id]) %>% 
   select(row, col, fill_colour) %>% 
@@ -49,7 +51,7 @@ y1 <- y1 %>%
               paste0(rep("Current_Actions_", length(current_actions)), current_actions),
               "Red_List_Category"))
 
-
+y1
 
 
 
